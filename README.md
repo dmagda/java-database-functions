@@ -159,13 +159,14 @@ The `CustomFunctionsPostgres` class includes functions that you can add to Postg
     ```
 7. Run the following function that returns information about your runtime:
     ```sql
+    SELECT public.postgresSayHi();
     ```
 
  ### Update Custom Function
  
  As a developer you change the code all the time. Which means that our Java functions needs to be updated, recompiled and redeployed to Postgres.
 
- 1. Go ahead and change the implementation of the `CustomFunctionsPostgres.postgresSayHi()` function (at a minimum, add a few `System.out.printlns("...")`) and redeploy the function to Postgres.
+ 1. Go ahead and change the implementation of the `CustomFunctionsPostgres.postgresSayHi()` function (at a minimum, change the message printed by the function) and redeploy the function to Postgres.
 
  2. Create a new package:
     ```shell
@@ -178,13 +179,7 @@ The `CustomFunctionsPostgres` class includes functions that you can add to Postg
     '{your_project_root_dir}/java-database-functions/target/java-database-functions-1.0.jar',
     'java_custom_functions', true);
     ```
-
-    SELECT sqlj.install_jar(
-    'file:'
-    '/home/dmagda/java-database-functions/target/java-database-functions-1.0.jar',
-    'java_custom_functions', true);
-
-    SELECT sqlj.replace_jar(
-    'file:'
-    '/home/dmagda/java-database-functions/target/java-database-functions-1.0.jar',
-    'java_custom_functions', true);
+4. Execute the updated function:
+    ```sql
+    SELECT public.postgresSayHi();
+    ```

@@ -33,7 +33,6 @@ public class CustomFunctionsPostgres {
         System.out.println();
 
         System.out.println("    Java version -> " + System.getProperty("java.version"));
-        System.out.println("    Java Home -> " + System.getProperty("java.home"));
 
         System.out.println();
 

@@ -72,7 +72,7 @@ https://tada.github.io/pljava/examples/examples.html
     ```sql
     SELECT sqlj.install_jar(
     'file:'
-    '/home/dmagda/pljava/pljava-examples/target/pljava-examples-2-SNAPSHOT.jar',
+    '{your_project_root_dir}/pljava/pljava-examples/target/pljava-examples-2-SNAPSHOT.jar',
     'examples', true);
     ```
 2. Make sure the `javatest` schema appeared on `search_path`:
@@ -96,7 +96,7 @@ https://tada.github.io/pljava/examples/examples.html
                6
     (1 row)
     ```
- ### Install and Run Custom Function
+### Install and Run Custom Function
  
 The `CustomFunctionsPostgres` class includes functions that you can add to Postgres and execute via the SQL interface.
 
@@ -131,7 +131,50 @@ The `CustomFunctionsPostgres` class includes functions that you can add to Postg
     END REMOVE"
     }
     ```
- 
+3. Connect to Postgres:
+    ```shell
+    #Ubuntu-specific
+    sudo -u postgres psql
+    ```
+4. Install the functions into Postgres:
+    ```sql
+    SELECT sqlj.install_jar(
+    'file:'
+    '{your_project_root_dir}/java-database-functions/target/java-database-functions-1.0.jar',
+    'java_custom_functions', true);
+    ```
+    Read this doc to understand what `install_jar` arguments mean: https://github.com/tada/pljava/wiki/SQL-functions
+5. Add the jar to the Postgres `public` schema:
+    ```sql
+    select sqlj.set_classpath('public', 'java_custom_functions');
+    ```
+6. Make sure the Jar is on the `public` schema's classpath:
+    ```sql
+    select sqlj.get_classpath('public');
+
+         get_classpath     
+    -----------------------
+    java_custom_functions
+    (1 row)
+    ```
+7. Run the following function that returns information about your runtime:
+    ```sql
+    ```
+
  ### Update Custom Function
  
- TBD
+ As a developer you change the code all the time. Which means that our Java functions needs to be updated, recompiled and redeployed to Postgres.
+
+ 1. Go ahead and change the implementation of the `CustomFunctionsPostgres.postgresSayHi()` function (at a minimum, add a few `System.out.printlns("...")`) and redeploy the function to Postgres.
+
+ 2. Create a new package:
+    ```shell
+    mvn clean package
+    ```
+3. Redeploy the function to Postgres using the [replace_jar](https://github.com/tada/pljava/wiki/SQL-functions#replace_jar) procedure:
+    ```sql
+    SELECT sqlj.replace_jar(
+    'file:'
+    '{your_project_root_dir}/java-database-functions/target/java-database-functions-1.0.jar',
+    true);
+    ```

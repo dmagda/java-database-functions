@@ -21,23 +21,29 @@ public class CustomFunctionsPostgres {
      * The Hello World function that returns information about the runtime.
      */
     @Function
-    public static void postgresSayHi() {
-        System.out.println("Hey, this Java function is executed by Postgres");
+    public static String postgresSayHi() {
+        StringBuilder builder = new StringBuilder();
+        String lineSeparator = System.getProperty("line.separator");
 
-        System.out.println("This is my environment:");
+        builder.append("Hey, this Java function is executed by Postgres");
+        builder.append(lineSeparator);
 
-        System.out.println("    OS -> " + System.getProperty("os.name"));
-        System.out.println("    OS version -> " + System.getProperty("os.version"));
-        System.out.println("    OS architecture -> " + System.getProperty("os.arch"));
+        builder.append("This is my environment:").append(lineSeparator);
 
-        System.out.println();
+        builder.append("    OS -> " + System.getProperty("os.name")).append(lineSeparator);
+        builder.append("    OS version -> " + System.getProperty("os.version")).append(lineSeparator);
+        builder.append("    OS architecture -> " + System.getProperty("os.arch")).append(lineSeparator);
 
-        System.out.println("    Java version -> " + System.getProperty("java.version"));
+        builder.append(lineSeparator);
 
-        System.out.println();
+        builder.append("    Java version -> " + System.getProperty("java.version")).append(lineSeparator);
 
-        System.out.println("    Total memory -> " + Runtime.getRuntime().totalMemory());
-        System.out.println("    Free memory -> " + Runtime.getRuntime().freeMemory());
-        System.out.println("    Max memory -> " + Runtime.getRuntime().maxMemory());
+        builder.append(lineSeparator);
+
+        builder.append("    Total memory -> " + Runtime.getRuntime().totalMemory()).append(lineSeparator);
+        builder.append("    Free memory -> " + Runtime.getRuntime().freeMemory()).append(lineSeparator);
+        builder.append("    Max memory -> " + Runtime.getRuntime().maxMemory()).append(lineSeparator);
+
+        return builder.toString();
     }
 }

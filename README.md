@@ -176,5 +176,15 @@ The `CustomFunctionsPostgres` class includes functions that you can add to Postg
     SELECT sqlj.replace_jar(
     'file:'
     '{your_project_root_dir}/java-database-functions/target/java-database-functions-1.0.jar',
-    true);
+    'java_custom_functions', true);
     ```
+
+    SELECT sqlj.install_jar(
+    'file:'
+    '/home/dmagda/java-database-functions/target/java-database-functions-1.0.jar',
+    'java_custom_functions', true);
+
+    SELECT sqlj.replace_jar(
+    'file:'
+    '/home/dmagda/java-database-functions/target/java-database-functions-1.0.jar',
+    'java_custom_functions', true);

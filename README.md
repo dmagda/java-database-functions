@@ -203,15 +203,12 @@ The `CustomFunctionsPostgres` class includes functions that you can add to Postg
     ```sql
     SELECT public.postgresSayHi();
     ```
-## YugabyteDB
-
-TBD
 
 ## Oracle
 
 Oracle Database runs Oracle JVM natively. The JVM is [deeply integrated into the database](https://docs.oracle.com/en/database/oracle/oracle-database/19/jjdev/Java-application-database-session.html).
 
-## Enable Oracle JVM with Autonomous Database
+### Enable Oracle JVM with Autonomous Database
 
 The [following guide](https://docs.oracle.com/en/database/oracle/oracle-database/19/jjdev/installation-and-configuration.html#GUID-D4659736-30EB-4810-ADA0-F2D8E1BE4F77) gives a high-level overview of the configuration process. But that guide lacks precise step-by-step instructions. Instead, let's [follow another guide](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/autonomous-oracle-java.html#GUID-2516EE33-B38D-4270-BE52-30A4F9014E8B) that shows how to enable Java for the Oracle Autonomous Database (the cloud version).
 
@@ -243,7 +240,7 @@ The [following guide](https://docs.oracle.com/en/database/oracle/oracle-database
     SELECT dbms_java.get_jdk_version FROM DUAL;
     ```
 
-## Install and Run Custom Functions
+### Install and Run Custom Functions
 
 1. Compile the `CustomFunctionsOracle.java` class
 
@@ -274,7 +271,7 @@ The [following guide](https://docs.oracle.com/en/database/oracle/oracle-database
 
 Apache Ignite support a comprehensive compute API for Java. You can think of it as of an advanced version of stored procedures.
 
-## Install and Start Ignite
+### Install and Start Ignite
 
 1. Download Ignite 2.13.0 (the binary package):
     https://ignite.apache.org/download.cgi
@@ -301,7 +298,7 @@ Apache Ignite support a comprehensive compute API for Java. You can think of it 
     ./ignite.sh ignite_config.xml
     ```
 
-## Run Custom Compute Task
+### Run Custom Compute Task
 
 1. Compile and start the `CustomFunctionsIgnite.java` class
 
@@ -311,8 +308,12 @@ Apache Ignite support a comprehensive compute API for Java. You can think of it 
     ```
 2. Check the logs of the Ignite server node. The logic will be executed there!
 
-## Update Custom Task
+### Update Custom Task
 
 1. Go ahead and update the `CustomFunctionsIgnite.igniteSayHi()` method the way you like.
 
 2. Restart the app. Check the server logs. The new version of the logic will be updated automically.
+
+## YugabyteDB
+
+TBD

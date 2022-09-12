@@ -13,8 +13,10 @@ If YES, then follow the guide below!
     - [Run Examples Shipped with PL/Java](#run-examples-shipped-with-pljava)
     - [Install and Run Custom Function](#install-and-run-custom-function)
     - [Update Custom Function](#update-custom-function)
-  - [YugabyteDB](#yugabytedb)
   - [Oracle](#oracle)
+  - [Apache Ignite](#apache-ignite)
+  - [YugabyteDB](#yugabytedb)
+
 
 <!-- vscode-markdown-toc-config
     numbering=false
@@ -265,7 +267,8 @@ The [following guide](https://docs.oracle.com/en/database/oracle/oracle-database
     ```sql
     call dbms_java.loadjava('{class_dir}/CustomFunctionsOracle.class');
     ```
-6. Next steps, not finished yet.
+6. Next steps, not finished yet
+    https://docs.oracle.com/en/database/oracle/oracle-database/19/jjdev/running-Java-stored-procedures.html#GUID-6B7D8A8A-D77B-4345-B9E5-ADC8180A6423
 
 ## Apache Ignite
 

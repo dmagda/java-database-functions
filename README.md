@@ -207,4 +207,109 @@ TBD
 
 ## Oracle
 
-TBD
+Oracle Database runs Oracle JVM natively. The JVM is [deeply integrated into the database](https://docs.oracle.com/en/database/oracle/oracle-database/19/jjdev/Java-application-database-session.html).
+
+## Enable Oracle JVM with Autonomous Database
+
+The [following guide](https://docs.oracle.com/en/database/oracle/oracle-database/19/jjdev/installation-and-configuration.html#GUID-D4659736-30EB-4810-ADA0-F2D8E1BE4F77) gives a high-level overview of the configuration process. But that guide lacks precise step-by-step instructions. Instead, let's [follow another guide](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/autonomous-oracle-java.html#GUID-2516EE33-B38D-4270-BE52-30A4F9014E8B) that shows how to enable Java for the Oracle Autonomous Database (the cloud version).
+
+1. Start an Oracle Autonomous Database:
+    http://cloud.oracle.com/
+
+2. Start Oracle Cloud Shell:
+    ![image info](./resources/start_cloud_shell.png)
+
+3. Follow the guide below to connect to the database from Cloud Shell:
+    https://blogs.oracle.com/cloud-infrastructure/post/simple-steps-to-connect-autonomous-database-from-oci-cloud-shell
+
+    Note, add the `TNS_ADMIN` variable to the `.bashrc` file so it's always set if Cloud Shell is restarted.
+
+4. Enable Java on the database end:
+    ```sql
+    BEGIN DBMS_CLOUD_ADMIN.ENABLE_FEATURE(feature_name => 'JAVAVM');
+    END;
+    /
+    ```
+5. [Restart](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/autonomous-restart.html#GUID-333DD791-F14C-437C-8B2F-05EF78742493) the database to finish the Java installation
+
+6. Check the Java version:
+    ```sql
+    SELECT status, version FROM DBA_REGISTRY WHERE comp_id = 'JAVAVM';
+    ```
+7. Check the JDK version:
+    ```sql
+    SELECT dbms_java.get_jdk_version FROM DUAL;
+    ```
+
+## Install and Run Custom Functions
+
+1. Compile the `CustomFunctionsOracle.java` class
+
+2. Load the class to the Cloud Shell instance (feel free to use other methods):
+    https://docs.oracle.com/en-us/iaas/Content/API/Concepts/devcloudshellgettingstarted.htm#Cloud_Shell_Transferring_Files
+
+3. Connect to the database and load the file:
+    ```shell
+    sqlplus {username}@{database_name}
+    ```
+    replace `{username}` and `{database_name}` with your settings.
+
+4. You need to have [several security permissions](https://docs.oracle.com/database/121/JJDEV/chten.htm#JJDEV10000) in place before deploy the Java code:
+    ```sql
+    grant JAVASYSPRIV to ADMIN;
+
+    call dbms_java.grant_permission('ADMIN', 'SYS:java.io.FilePermission', '<<ALL FILES>>',  'read,write');
+    ```
+
+5. Load the file onto the database:
+    ```sql
+    call dbms_java.loadjava('{class_dir}/CustomFunctionsOracle.class');
+    ```
+6. Next steps, not finished yet.
+
+## Apache Ignite
+
+Apache Ignite support a comprehensive compute API for Java. You can think of it as of an advanced version of stored procedures.
+
+## Install and Start Ignite
+
+1. Download Ignite 2.13.0 (the binary package):
+    https://ignite.apache.org/download.cgi
+
+2. Navigate to the `bin` directory:
+    ```shell
+    cd apache-ignite-2.13.0-bin/bin
+    ```
+3. Create a configuration file name `ignite_config.xml` with the following content:
+    ```xml
+    <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+        <bean class="org.apache.ignite.configuration.IgniteConfiguration">
+            <property name="peerClassLoadingEnabled" value="true"/>
+        </bean>
+    </beans>
+    ```
+4. Start an Ignite server node with that configuration:
+    ```shell
+    ./ignite.sh ignite_config.xml
+    ```
+
+## Run Custom Compute Task
+
+1. Compile and start the `CustomFunctionsIgnite.java` class
+
+    Note, if you're on Java 9+ then add the following JVM arguments to the class startup:
+    ```shell
+    --add-exports=java.base/jdk.internal.misc=ALL-UNNAMED --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=java.management/com.sun.jmx.mbeanserver=ALL-UNNAMED --add-exports=jdk.internal.jvmstat/sun.jvmstat.monitor=ALL-UNNAMED --add-exports=java.base/sun.reflect.generics.reflectiveObjects=ALL-UNNAMED --add-opens=jdk.management/com.sun.management.internal=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --illegal-access=permit
+    ```
+2. Check the logs of the Ignite server node. The logic will be executed there!
+
+## Update Custom Task
+
+1. Go ahead and update the `CustomFunctionsIgnite.igniteSayHi()` method the way you like.
+
+2. Restart the app. Check the server logs. The new version of the logic will be updated automically.

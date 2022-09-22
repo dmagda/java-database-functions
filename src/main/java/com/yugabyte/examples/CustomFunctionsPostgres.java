@@ -25,7 +25,7 @@ public class CustomFunctionsPostgres {
         StringBuilder builder = new StringBuilder();
         String lineSeparator = System.getProperty("line.separator");
 
-        builder.append("Hey, we've just update the function!");
+        builder.append("Hey, this Java function is executed by Postgres");
         builder.append(lineSeparator);
 
         builder.append("This is my environment:").append(lineSeparator);
